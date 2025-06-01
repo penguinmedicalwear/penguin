@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>طلبات المدير - Penguin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #121212; color: white; font-family: 'Cairo', sans-serif; padding: 20px; }
+    .order-card { background-color: #1e1e1e; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #333; }
+  </style>
+</head>
+<body>
+  <h1 class="text-center mb-4">📦 جميع الطلبات</h1>
+  <div id="ordersContainer"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const ordersContainer = document.getElementById('ordersContainer');
+    db.collection("orders").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+      ordersContainer.innerHTML = "";
+      snapshot.forEach(doc => {
+        const order = doc.data();
+        const itemsList = order.items.map(i => `<li>${i.product} - ${i.price} جنيه</li>`).join("");
+        ordersContainer.innerHTML += `
+          <div class="order-card">
+            <h5>${order.name} (${order.phone})</h5>
+            <p>📍 ${order.address}</p>
+            <ul>${itemsList}</ul>
+            <p><strong>الإجمالي:</strong> ${order.total} جنيه</p>
+          </div>
+        `;
+      });
+    });
+  </script>
+</body>
+</html>

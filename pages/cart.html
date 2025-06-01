@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>عربة التسوق - Penguin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      padding: 20px;
+    }
+    .cart-item {
+      background-color: #1e1e1e;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      position: relative;
+    }
+    .form-control, .form-label {
+      color: black;
+    }
+    .floating-message {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(10, 20, 40, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 999;
+    }
+    .floating-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <h1 class="text-center mb-4">🛒 عربة التسوق</h1>
+
+  <div id="cartItems" class="container mb-4"></div>
+  <h3 class="text-center">المجموع: <span id="totalPrice">0</span> جنيه</h3>
+
+  <div class="container mb-4">
+    <h4>معلومات العميل</h4>
+    <div class="mb-3">
+      <label class="form-label">الاسم</label>
+      <input type="text" id="customerName" class="form-control" placeholder="أدخل اسمك" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">العنوان</label>
+      <input type="text" id="customerAddress" class="form-control" placeholder="أدخل عنوانك" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">رقم الهاتف</label>
+      <input type="text" id="customerPhone" class="form-control" placeholder="أدخل رقم هاتفك" />
+    </div>
+    <button class="btn btn-success mb-2" onclick="confirmOrder()">✅ تأكيد الطلب</button>
+    <button class="btn btn-danger mb-2" onclick="clearCart()">🗑 مسح كل العربة</button>
+  </div>
+
+  <div class="text-center">
+    <a href="../index.html" class="btn btn-primary">← العودة للتسوق</a>
+  </div>
+
+  <div id="floatingMessage" class="floating-message"></div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- EmailJS v3 (script بدون module) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init('U8LPs6fq9xB7OP3wU');
+    })();
+  </script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const cartContainer = document.getElementById("cartItems");
+    const totalPriceElement = document.getElementById("totalPrice");
+    const floatingMessage = document.getElementById("floatingMessage");
+    let cartItemsData = [];
+    let totalPrice = 0;
+
+    function showFloatingMessage(message, color = "#4caf50") {
+      floatingMessage.textContent = message;
+      floatingMessage.style.backgroundColor = color;
+      floatingMessage.classList.add("show");
+      setTimeout(() => {
+        floatingMessage.classList.remove("show");
+      }, 2000);
+    }
+
+    function loadCartItems() {
+      cartContainer.innerHTML = '<p class="text-center">...جاري تحميل العربة</p>';
+      db.collection("cart")
+        .orderBy("createdAt", "desc")
+        .get()
+        .then(snapshot => {
+          if (snapshot.empty) {
+            cartContainer.innerHTML = "<p class='text-center'>العربة فارغة حالياً.</p>";
+            totalPriceElement.textContent = "0";
+          } else {
+            cartContainer.innerHTML = "";
+            totalPrice = 0;
+            cartItemsData = [];
+            snapshot.forEach(doc => {
+              const item = doc.data();
+              item.id = doc.id;
+              cartItemsData.push({ id: doc.id, product: item.product, price: item.price });
+              totalPrice += item.price;
+              cartContainer.innerHTML += `
+                <div class="cart-item">
+                  <h5>${item.product}</h5>
+                  <p>السعر: ${item.price} جنيه</p>
+                  <button class="btn btn-danger btn-sm" onclick="removeItem('${doc.id}')">🗑 حذف</button>
+                </div>
+              `;
+            });
+            totalPriceElement.textContent = totalPrice;
+          }
+        })
+        .catch(error => {
+          console.error("خطأ في تحميل العربة:", error);
+          cartContainer.innerHTML = "<p class='text-center text-danger'>حدث خطأ أثناء تحميل العربة.</p>";
+        });
+    }
+
+    function removeItem(id) {
+      db.collection("cart").doc(id).delete()
+        .then(() => {
+          showFloatingMessage("✅ تم حذف المنتج.");
+          loadCartItems();
+        })
+        .catch(error => {
+          console.error("❌ خطأ في الحذف:", error);
+          showFloatingMessage("❌ حدث خطأ أثناء حذف المنتج.", "#f44336");
+        });
+    }
+
+    function clearCart() {
+      if (cartItemsData.length === 0) {
+        showFloatingMessage("❗ العربة فارغة أصلاً.", "#ff9800");
+        return;
+      }
+
+      const batch = db.batch();
+      cartItemsData.forEach(item => {
+        const ref = db.collection("cart").doc(item.id);
+        batch.delete(ref);
+      });
+
+      batch.commit()
+        .then(() => {
+          showFloatingMessage("🗑 تم مسح كل المنتجات.");
+          loadCartItems();
+        })
+        .catch(error => {
+          console.error("❌ خطأ في مسح العربة:", error);
+          showFloatingMessage("❌ حدث خطأ أثناء مسح العربة.", "#f44336");
+        });
+    }
+
+    function confirmOrder() {
+      const name = document.getElementById("customerName").value.trim();
+      const address = document.getElementById("customerAddress").value.trim();
+      const phone = document.getElementById("customerPhone").value.trim();
+
+      if (!name || !address || !phone) {
+        showFloatingMessage("❗ يرجى ملء جميع البيانات.", "#ff9800");
+        return;
+      }
+
+      if (cartItemsData.length === 0) {
+        showFloatingMessage("❗ العربة فارغة، أضف منتجات أولاً.", "#ff9800");
+        return;
+      }
+
+      const orderItems = cartItemsData.map(item => ({
+        product: item.product,
+        price: item.price
+      }));
+
+      const orderDetails = orderItems.map(item => `${item.product} - ${item.price} جنيه`).join('\n');
+
+      const order = {
+        name,
+        address,
+        phone,
+        items: orderItems,
+        total: totalPrice,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      db.collection("orders").add(order)
+        .then(() => {
+          emailjs.send('service_h2uznfq', 'template_8hhcsb7', {
+            name: name,
+            address: address,
+            phone: phone,
+            total: totalPrice,
+            items: orderDetails,
+          }).then(() => {
+            console.log('✅ Email sent!');
+          }).catch(error => {
+            console.error('❌ Error sending email:', error);
+          });
+
+          const batch = db.batch();
+          cartItemsData.forEach(item => {
+            const ref = db.collection("cart").doc(item.id);
+            batch.delete(ref);
+          });
+
+          batch.commit().then(() => {
+            showFloatingMessage("✅ تم تأكيد الطلب! سيتم التوجيه...", "#4caf50");
+            setTimeout(() => {
+              window.location.href = "thankyou.html";
+            }, 1500);
+          });
+        })
+        .catch(error => {
+          console.error("❌ خطأ في تأكيد الطلب:", error);
+          showFloatingMessage("❌ حدث خطأ أثناء تأكيد الطلب.", "#f44336");
+        });
+    }
+
+    loadCartItems();
+  </script>
+</body>
+</html>

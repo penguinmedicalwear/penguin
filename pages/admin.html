@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>لوحة الإدارة - Penguin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      padding: 20px;
+    }
+    table {
+      background-color: #1e1e1e;
+    }
+    th, td {
+      color: white;
+    }
+    .btn-status {
+      margin: 0 5px 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="text-center mb-4">لوحة إدارة الطلبات</h1>
+  <div class="text-end mb-3">
+    <button class="btn btn-success" onclick="exportToCSV()">📤 تصدير الطلبات المكتملة</button>
+  </div>
+
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr>
+        <th>الاسم</th>
+        <th>الهاتف</th>
+        <th>العنوان</th>
+        <th>المجموع</th>
+        <th>المنتجات</th>
+        <th>الحالة</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTableBody"></tbody>
+  </table>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let completedOrders = [];
+
+    function loadOrders() {
+      db.collection('orders').onSnapshot(snapshot => {
+        const tbody = document.getElementById('ordersTableBody');
+        tbody.innerHTML = '';
+        snapshot.forEach(doc => {
+          const order = doc.data();
+          const itemsText = Array.isArray(order.items)
+            ? order.items.map(item => `${item.product} (${item.price} جنيه)`).join(' | ')
+            : order.items;
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${order.name}</td>
+            <td>${order.phone}</td>
+            <td>${order.address}</td>
+            <td>${order.total}</td>
+            <td>${itemsText}</td>
+            <td>${order.status || 'قيد الانتظار'}</td>
+            <td>
+              <button class="btn btn-primary btn-status" onclick="updateStatus('${doc.id}', 'وصل للعميل')">✅ وصل للعميل</button>
+              <button class="btn btn-warning btn-status" onclick="updateStatus('${doc.id}', 'في شركة الشحن')">🚚 في الشحن</button>
+              <button class="btn btn-secondary btn-status" onclick="updateStatus('${doc.id}', 'غير متوفر - تصنيع')">🏭 تصنيع</button>
+              <button class="btn btn-danger btn-status" onclick="updateStatus('${doc.id}', 'رفض الاستلام')">❌ رفض الاستلام</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    function updateStatus(orderId, newStatus) {
+      db.collection('orders').doc(orderId).get().then(doc => {
+        const order = doc.data();
+        if (newStatus === 'وصل للعميل' || newStatus === 'رفض الاستلام') {
+          completedOrders.push({
+            name: order.name,
+            phone: order.phone,
+            address: order.address,
+            total: order.total,
+            items: Array.isArray(order.items)
+              ? order.items.map(item => `${item.product} (${item.price} جنيه)`).join(' | ')
+              : order.items,
+            status: newStatus,
+            reason: newStatus === 'رفض الاستلام' ? 'العميل رفض' : ''
+          });
+          db.collection('orders').doc(orderId).delete();
+        } else {
+          db.collection('orders').doc(orderId).update({ status: newStatus });
+        }
+      });
+    }
+
+    function exportToCSV() {
+      if (completedOrders.length === 0) {
+        alert('⚠️ لا توجد طلبات مكتملة للتصدير.');
+        return;
+      }
+
+      let csvContent = '\uFEFF' + 'الاسم,رقم الهاتف,العنوان,المجموع,المنتجات,الحالة,السبب\n';
+      completedOrders.forEach(order => {
+        csvContent += `${order.name},${order.phone},${order.address},${order.total},"${order.items}",${order.status},${order.reason}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'completed_orders.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      alert('✅ تم تصدير الطلبات بنجاح.');
+    }
+
+    window.onload = loadOrders;
+  </script>
+</body>
+</html>
