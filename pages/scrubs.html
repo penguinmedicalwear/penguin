@@ -19,6 +19,13 @@
     .card-title, .card-text, p {
       color: #f1f1f1;
     }
+    .card-body label {
+      color: #fff;
+    .price-original {
+      text-decoration: line-through;
+      color: #bbb;
+      margin-left: 10px;
+    }
     .btn {
       color: #fff;
     }
@@ -75,160 +82,158 @@
   <h1 class="text-center mb-4">سكرابات طبية</h1>
 
   <div class="container my-5">
-    <!-- كارت 1 -->
-    <div class="col-md-4">
-      <div class="card mb-4">
-        <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 أمام">
-            </div>
-            <div class="carousel-item">
-              <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" alt="سكراب 1 جانب">
-            </div>
-            <div class="carousel-item">
-              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 خلف">
-            </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
-        </div>
-        <div class="thumbnails">
-          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
-          <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" onclick="goToSlide('scrub1Carousel', 1, this)">
-          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 2, this)">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">سكراب دبي </h5>
-          <p class="card-text">خامة ايطالي مريحة ومناسبة للعمل لساعات طويلة.</p>
-          <p>السعر: 1000 جنيه</p>
-          <P>بعد الخصم: 600 جنيه</p>
+    <div class="row g-4 justify-content-center">
 
-          <div class="mb-2">
-            <label>اختر المقاس:</label><br>
-            <div class="btn-group" role="group" aria-label="Size buttons">
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
+      <!-- كارت 1 -->
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="assets/images/scrub1.jpg" class="w-100" alt="سكراب 1">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/images/scrub2.jpg" class="w-100" alt="سكراب 2">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/images/logo.png" class="w-100" alt="سكراب 3">
+              </div>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
           </div>
+          <div class="thumbnails">
+            <img src="assets/images/scrub1.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
+            <img src="assets/images/scrub2.jpg" onclick="goToSlide('scrub1Carousel', 1, this)">
+            <img src="assets/images/logo.png" onclick="goToSlide('scrub1Carousel', 2, this)">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">سكراب Dubai </h5>
+            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلة.</p>
+            <p><span class="price-original">1000 جنيه</span> <span>600 جنيه</span></p>
 
-          <button class="btn btn-success" onclick="addToCart('سكراب بنجوين كلاسيك', 700, this)">إضافة للعربة</button>
-          <div class="successMessage">✅ تمت الإضافة!</div>
+            <div class="mb-2">
+              <label>اختر المقاس:</label><br>
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
+              </div>
+            </div>
+
+            <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
+            <div class="successMessage">✅ تمت الإضافة!</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="container my-5">
-    <!-- كارت 2 -->
-    <div class="col-md-4">
-      <div class="card mb-4">
-        <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 أمام">
+      <!-- كارت 2 -->
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div id="scrub2Carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="assets/images/scrub3.jpg" class="w-100" alt="سكراب 4">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/images/scrub4.jpg" class="w-100" alt="سكراب 5">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/images/logo.png" class="w-100" alt="سكراب 6">
+              </div>
             </div>
-            <div class="carousel-item">
-              <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" alt="سكراب 1 جانب">
-            </div>
-            <div class="carousel-item">
-              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 خلف">
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#scrub2Carousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#scrub2Carousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
-        </div>
-        <div class="thumbnails">
-          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
-          <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" onclick="goToSlide('scrub1Carousel', 1, this)">
-          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 2, this)">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">سكراب دبي </h5>
-          <p class="card-text">خامة ايطالي مريحة ومناسبة للعمل لساعات طويلة.</p>
-          <p>السعر: 1000 جنيه</p>
-          <P>بعد الخصم: 600 جنيه</p>
-
-          <div class="mb-2">
-            <label>اختر المقاس:</label><br>
-            <div class="btn-group" role="group" aria-label="Size buttons">
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
-            </div>
+          <div class="thumbnails">
+            <img src="assets/images/scrub3.jpg" onclick="goToSlide('scrub2Carousel', 0, this)" class="active">
+            <img src="assets/images/scrub4.jpg" onclick="goToSlide('scrub2Carousel', 1, this)">
+            <img src="assets/images/logo.png" onclick="goToSlide('scrub2Carousel', 2, this)">
           </div>
+          <div class="card-body">
+            <h5 class="card-title">سكراب aquaman </h5>
+            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلق.</p>
+            <p><span class="price-original">1000 جنيه</span> <span>600 جنيه</span></p>
 
-          <button class="btn btn-success" onclick="addToCart('سكراب بنجوين كلاسيك', 700, this)">إضافة للعربة</button>
-          <div class="successMessage">✅ تمت الإضافة!</div>
+            <div class="mb-2">
+              <label>اختر المقاس:</label><br>
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
+              </div>
+            </div>
+
+            <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
+            <div class="successMessage">✅ تمت الإضافة!</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
- <div class="container my-5">
-    <!-- كارت 3 -->
-    <div class="col-md-4">
-      <div class="card mb-4">
-        <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 أمام">
-            </div>
-            <div class="carousel-item">
-              <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" alt="سكراب 1 جانب">
-            </div>
-            <div class="carousel-item">
-              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 خلف">
-            </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
-        </div>
-        <div class="thumbnails">
-          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
-          <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" onclick="goToSlide('scrub1Carousel', 1, this)">
-          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 2, this)">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">سكراب دبي </h5>
-          <p class="card-text">خامة ايطالي مريحة ومناسبة للعمل لساعات طويلة.</p>
-          <p>السعر: 1000 جنيه</p>
-          <P>بعد الخصم: 600 جنيه</p>
 
-          <div class="mb-2">
-            <label>اختر المقاس:</label><br>
-            <div class="btn-group" role="group" aria-label="Size buttons">
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
-              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
+      <!-- كارت 3 -->
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div id="scrub3Carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="assets/images/scrub5.jpg" class="w-100" alt="سكراب 7">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/images/scrub6.jpg" class="w-100" alt="سكراب 8">
+              </div>
+              <div class="carousel-item">
+                <img src="assets/images/logo.png" class="w-100" alt="سكراب 9">
+              </div>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#scrub3Carousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#scrub3Carousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
           </div>
+          <div class="thumbnails">
+            <img src="assets/images/scrub5.jpg" onclick="goToSlide('scrub3Carousel', 0, this)" class="active">
+            <img src="assets/images/scrub6.jpg" onclick="goToSlide('scrub3Carousel', 1, this)">
+            <img src="assets/images/logo.png" onclick="goToSlide('scrub3Carousel', 2, this)">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">سكراب midnight</h5>
+            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلك.</p>
+            <p><span class="price-original">1000 جنيه</span> <span>600 جنيه</span></p>
 
-          <button class="btn btn-success" onclick="addToCart('سكراب بنجوين كلاسيك', 700, this)">إضافة للعربة</button>
-          <div class="successMessage">✅ تمت الإضافة!</div>
+            <div class="mb-2">
+              <label>اختر المقاس:</label><br>
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
+                <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
+              </div>
+            </div>
+
+            <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
+            <div class="successMessage">✅ تمت الإضافة!</div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -237,7 +242,6 @@
     <a href="cart.html" class="btn btn-success ms-2">🛒 عربة التسوق</a>
   </div>
 
-  <!-- Firebase & Bootstrap -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -263,11 +267,16 @@
       selectedSize = button.textContent;
     }
 
-    function addToCart(productName, price, buttonElement) {
+    function addToCart(buttonElement) {
       if (!selectedSize) {
         alert("❗ من فضلك اختر مقاس قبل الإضافة.");
         return;
       }
+
+      const card = buttonElement.closest(".card");
+      const productName = card.querySelector(".card-title").textContent.trim();
+      const priceText = card.querySelector("p span:last-child").textContent.trim();
+      const price = parseInt(priceText.replace(/[^\d]/g, ''));
 
       db.collection("cart").add({
         product: productName,
@@ -276,15 +285,14 @@
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        const messageBox = buttonElement.parentElement.querySelector('.successMessage');
+        const messageBox = card.querySelector('.successMessage');
         messageBox.classList.add('show');
         setTimeout(() => {
           messageBox.classList.remove('show');
         }, 2000);
 
-        // إعادة تعيين المقاس بعد الإضافة
         selectedSize = null;
-        const allSizeButtons = buttonElement.parentElement.querySelectorAll(".btn-group button");
+        const allSizeButtons = card.querySelectorAll(".btn-group button");
         allSizeButtons.forEach(btn => btn.classList.remove("active"));
       })
       .catch(error => {
