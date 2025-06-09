@@ -74,7 +74,7 @@
 <body>
   <h1 class="text-center mb-4">سكرابات طبية</h1>
 
-  <div class="row">
+  <div class="container my-5">
     <!-- كارت 1 -->
     <div class="col-md-4">
       <div class="card mb-4">
@@ -127,8 +127,60 @@
     </div>
   </div>
 
-  <div class="row">
-    <!-- كارت 1 -->
+  <div class="container my-5">
+    <!-- كارت 2 -->
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 أمام">
+            </div>
+            <div class="carousel-item">
+              <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" alt="سكراب 1 جانب">
+            </div>
+            <div class="carousel-item">
+              <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" alt="سكراب 1 خلف">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+        <div class="thumbnails">
+          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
+          <img src="C:\Users\the  first\penguin-website\assets\images\logo.png" onclick="goToSlide('scrub1Carousel', 1, this)">
+          <img src="C:\Users\the  first\penguin-website\assets\images\scrub2.jpg" onclick="goToSlide('scrub1Carousel', 2, this)">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">سكراب دبي </h5>
+          <p class="card-text">خامة ايطالي مريحة ومناسبة للعمل لساعات طويلة.</p>
+          <p>السعر: 1000 جنيه</p>
+          <P>بعد الخصم: 600 جنيه</p>
+
+          <div class="mb-2">
+            <label>اختر المقاس:</label><br>
+            <div class="btn-group" role="group" aria-label="Size buttons">
+              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">S</button>
+              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">M</button>
+              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">L</button>
+              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XL</button>
+              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXL</button>
+              <button type="button" class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
+            </div>
+          </div>
+
+          <button class="btn btn-success" onclick="addToCart('سكراب بنجوين كلاسيك', 700, this)">إضافة للعربة</button>
+          <div class="successMessage">✅ تمت الإضافة!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+ <div class="container my-5">
+    <!-- كارت 3 -->
     <div class="col-md-4">
       <div class="card mb-4">
         <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
