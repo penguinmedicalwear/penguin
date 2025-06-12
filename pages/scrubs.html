@@ -15,8 +15,10 @@
       background-color: #1e1e1e;
       border: 1px solid #444;
       position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border-radius: 15px;
     }
-    .card-title, .card-text, p {
+    .card-title, .card-text, p, label {
       color: #f1f1f1;
     }
     .price-original {
@@ -70,6 +72,7 @@
       margin: 0 5px;
       border: 2px solid transparent;
       cursor: pointer;
+      border-radius: 5px;
     }
     .thumbnails img.active {
       border-color: #0d6efd;
@@ -80,21 +83,21 @@
   <h1 class="text-center mb-4">سكرابات طبية</h1>
 
   <div class="container my-5">
-    <div class="row g-4 justify-content-center">
+    <div class="row g-4 justify-content-center flex-column">
 
       <!-- كارت 1 -->
-      <div class="col-md-4">
-        <div class="card mb-4">
+      <div class="col-12">
+        <div class="card mb-4 p-3">
           <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="assets/images/scrub1.jpg" class="w-100" alt="سكراب 1">
+                <img src="assets/images/scrub1.jpg" class="w-100" alt="سكراب دبي">
               </div>
               <div class="carousel-item">
-                <img src="assets/images/scrub2.jpg" class="w-100" alt="سكراب 2">
+                <img src="assets/images/scrub2.jpg" class="w-100" alt="سكراب دبي 2">
               </div>
               <div class="carousel-item">
-                <img src="assets/images/logo.png" class="w-100" alt="سكراب 3">
+                <img src="assets/images/logo.png" class="w-100" alt="شعار">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
@@ -110,10 +113,9 @@
             <img src="assets/images/logo.png" onclick="goToSlide('scrub1Carousel', 2, this)">
           </div>
           <div class="card-body">
-            <h5 class="card-title">سكراب Dubai </h5>
+            <h5 class="card-title">سكراب Dubai</h5>
             <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلة.</p>
             <p><span class="price-original">1000 جنيه</span> <span>600 جنيه</span></p>
-
             <div class="mb-2">
               <label>اختر المقاس:</label><br>
               <div class="btn-group" role="group">
@@ -125,45 +127,42 @@
                 <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
               </div>
             </div>
-
+            <a href="details.html?id=dubai" class="btn btn-info mb-2">عرض التفاصيل</a>
             <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
             <div class="successMessage">✅ تمت الإضافة!</div>
           </div>
         </div>
       </div>
-
-      <!-- كارت 2 -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div id="scrub2Carousel" class="carousel slide" data-bs-ride="carousel">
+<div class="col-12">
+        <div class="card mb-4 p-3">
+          <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="assets/images/scrub3.jpg" class="w-100" alt="سكراب 4">
+                <img src="assets/images/scrub1.jpg" class="w-100" alt="سكراب دبي">
               </div>
               <div class="carousel-item">
-                <img src="assets/images/scrub4.jpg" class="w-100" alt="سكراب 5">
+                <img src="assets/images/scrub2.jpg" class="w-100" alt="سكراب دبي 2">
               </div>
               <div class="carousel-item">
-                <img src="assets/images/logo.png" class="w-100" alt="سكراب 6">
+                <img src="assets/images/logo.png" class="w-100" alt="شعار">
               </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#scrub2Carousel" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
               <span class="carousel-control-prev-icon"></span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#scrub2Carousel" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
               <span class="carousel-control-next-icon"></span>
             </button>
           </div>
           <div class="thumbnails">
-            <img src="assets/images/scrub3.jpg" onclick="goToSlide('scrub2Carousel', 0, this)" class="active">
-            <img src="assets/images/scrub4.jpg" onclick="goToSlide('scrub2Carousel', 1, this)">
-            <img src="assets/images/logo.png" onclick="goToSlide('scrub2Carousel', 2, this)">
+            <img src="assets/images/scrub1.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
+            <img src="assets/images/scrub2.jpg" onclick="goToSlide('scrub1Carousel', 1, this)">
+            <img src="assets/images/logo.png" onclick="goToSlide('scrub1Carousel', 2, this)">
           </div>
           <div class="card-body">
             <h5 class="card-title">سكراب aquaman </h5>
-            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلق.</p>
+            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلة.</p>
             <p><span class="price-original">1000 جنيه</span> <span>600 جنيه</span></p>
-
             <div class="mb-2">
               <label>اختر المقاس:</label><br>
               <div class="btn-group" role="group">
@@ -175,45 +174,42 @@
                 <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
               </div>
             </div>
-
+            <a href="details.html?id=dubai" class="btn btn-info mb-2">عرض التفاصيل</a>
             <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
             <div class="successMessage">✅ تمت الإضافة!</div>
           </div>
         </div>
       </div>
-
-      <!-- كارت 3 -->
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div id="scrub3Carousel" class="carousel slide" data-bs-ride="carousel">
+<div class="col-12">
+        <div class="card mb-4 p-3">
+          <div id="scrub1Carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="assets/images/scrub5.jpg" class="w-100" alt="سكراب 7">
+                <img src="assets/images/scrub1.jpg" class="w-100" alt="سكراب دبي">
               </div>
               <div class="carousel-item">
-                <img src="assets/images/scrub6.jpg" class="w-100" alt="سكراب 8">
+                <img src="assets/images/scrub2.jpg" class="w-100" alt="سكراب دبي 2">
               </div>
               <div class="carousel-item">
-                <img src="assets/images/logo.png" class="w-100" alt="سكراب 9">
+                <img src="assets/images/logo.png" class="w-100" alt="شعار">
               </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#scrub3Carousel" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="prev">
               <span class="carousel-control-prev-icon"></span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#scrub3Carousel" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#scrub1Carousel" data-bs-slide="next">
               <span class="carousel-control-next-icon"></span>
             </button>
           </div>
           <div class="thumbnails">
-            <img src="assets/images/scrub5.jpg" onclick="goToSlide('scrub3Carousel', 0, this)" class="active">
-            <img src="assets/images/scrub6.jpg" onclick="goToSlide('scrub3Carousel', 1, this)">
-            <img src="assets/images/logo.png" onclick="goToSlide('scrub3Carousel', 2, this)">
+            <img src="assets/images/scrub1.jpg" onclick="goToSlide('scrub1Carousel', 0, this)" class="active">
+            <img src="assets/images/scrub2.jpg" onclick="goToSlide('scrub1Carousel', 1, this)">
+            <img src="assets/images/logo.png" onclick="goToSlide('scrub1Carousel', 2, this)">
           </div>
           <div class="card-body">
-            <h5 class="card-title">سكراب midnight</h5>
-            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلك.</p>
+            <h5 class="card-title">سكراب Midnight</h5>
+            <p class="card-text">خامة ايطالي فاخرة ومناسبة لساعات العمل الطويلة.</p>
             <p><span class="price-original">1000 جنيه</span> <span>600 جنيه</span></p>
-
             <div class="mb-2">
               <label>اختر المقاس:</label><br>
               <div class="btn-group" role="group">
@@ -225,13 +221,18 @@
                 <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
               </div>
             </div>
-
+            <a href="details.html?id=dubai" class="btn btn-info mb-2">عرض التفاصيل</a>
             <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
             <div class="successMessage">✅ تمت الإضافة!</div>
           </div>
         </div>
       </div>
 
+      <!-- باقي الكروت: Aqua man و Midnight -->
+      <!-- انسخ الكارت ده وعدل فقط العنوان والصور والرابط -->
+
+    </div>
+  </div>
     </div>
   </div>
 
