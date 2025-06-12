@@ -6,24 +6,40 @@
   <title>تفاصيل السكراپ</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <style>
-    body { background:#121212; color:#f1f1f1; font-family:'Cairo',sans-serif; padding:20px; }
-    .carousel-item img { height:300px; object-fit:cover; }
-    .price-original { text-decoration:line-through; color:#bbb; margin-left:10px; }
-    .size-label { color: white; font-weight: bold; margin-bottom: 10px; display:block; }
+    body { background: #121212; color: #f1f1f1; font-family: 'Cairo', sans-serif; padding: 20px; }
+    .carousel-item img { height: 300px; object-fit: cover; }
+    .price-original { text-decoration: line-through; color: #bbb; margin-left: 10px; }
+    .size-label { color: white; font-weight: bold; margin-bottom: 10px; display: block; }
     .size-btn { margin: 5px; }
+    .successMessage {
+      display: none;
+      margin-top: 10px;
+      color: #4caf50;
+      font-weight: bold;
+    }
+    .successMessage.show { display: block; }
   </style>
+
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <a href="scrubs.html" class="btn btn-secondary mb-3">← رجوع</a>
+
+  <div class="d-flex justify-content-between mb-3">
+    <a href="scrubs.html" class="btn btn-secondary">← رجوع</a>
+    <a href="cart.html" class="btn btn-primary">🛒 عربة التسوق</a>
+  </div>
 
   <div class="container">
     <div id="detailCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
       <div class="carousel-inner" id="detailSlides"></div>
-      <button class="carousel-control-prev" data-bs-target="#detailCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
-      <button class="carousel-control-next" data-bs-target="#detailCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+      <button class="carousel-control-prev" data-bs-target="#detailCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" data-bs-target="#detailCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
     </div>
 
     <h2 id="detailTitle"></h2>
@@ -32,23 +48,22 @@
 
     <label class="size-label">اختر المقاس:</label>
     <div id="sizeOptions">
-      <button class="btn btn-outline-light size-btn" onclick="selectSize('S')">S</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize('M')">M</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize('L')">L</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize('XL')">XL</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize('XXL')">XXL</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize('XXXL')">XXXL</button>
+      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'S')">S</button>
+      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'M')">M</button>
+      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'L')">L</button>
+      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XL')">XL</button>
+      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
+      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XXXL')">XXXL</button>
     </div>
 
-    <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
-            <div class="successMessage">✅ تمت الإضافة!</div>
+    <button class="btn btn-success mt-3" onclick="addToCart()">إضافة للعربة</button>
+    <div class="successMessage" id="successMessage">✅ تمت الإضافة!</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
     const firebaseConfig = {
-     apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
       authDomain: "penguin-orders.firebaseapp.com",
       projectId: "penguin-orders",
       storageBucket: "penguin-orders.appspot.com",
@@ -69,7 +84,7 @@
         title: 'Dubai',
         desc: 'خامة إيطالية فاخرة',
         orig: '1000 جنيه',
-        price: '600 جنيه'
+        price: '600'
       },
       Aqua: {
         imgs: [
@@ -81,7 +96,7 @@
         title: 'Aqua man',
         desc: 'لون مميز وقماش مقاوم للبهتان',
         orig: '1000 جنيه',
-        price: '600 جنيه'
+        price: '600'
       },
       Midnight: {
         imgs: [
@@ -93,48 +108,59 @@
         title: 'Midnight',
         desc: 'تصميم أنيق للمناوبات الليلية',
         orig: '1000 جنيه',
-        price: '600 جنيه'
+        price: '600'
       }
     };
 
-  
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productName = urlParams.get('product');
+    const product = data[productName];
 
-  <script>
-    firebase.initializeApp({apiKey:"...",authDomain:"...",projectId:"penguin-orders"});
-    const db = firebase.firestore();
     let selectedSize = null;
 
-    function selectSize(btn) {
-      const grp = btn.parentElement;
-      grp.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      selectedSize = btn.textContent;
+    function selectSize(btn, size) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSize = size;
     }
 
-    function addToCart(el) {
-      if (!selectedSize) return alert("❗ اختر المقاس");
-      const card=el.closest(".card");
-      const name=card.querySelector(".card-title").textContent;
-      const price=parseInt(card.querySelector("p span:last-child").textContent);
-      db.collection("cart").add({product:name,price:price, size:selectedSize, createdAt:firebase.firestore.FieldValue.serverTimestamp()})
-        .then(()=>{
-          const msg=card.querySelector(".successMessage");
-          msg.classList.add("show");
-          setTimeout(()=>msg.classList.remove("show"),2000);
-          selectedSize=null;
-          card.querySelectorAll(".btn-group button").forEach(b=>b.classList.remove("active"));
-        });
+    function addToCart() {
+      if (!selectedSize) {
+        alert('❗ اختر المقاس أولاً');
+        return;
+      }
+
+      db.collection("cart").add({
+        product: product.title,
+        price: parseInt(product.price),
+        size: selectedSize,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        document.getElementById("successMessage").classList.add("show");
+        setTimeout(() => {
+          document.getElementById("successMessage").classList.remove("show");
+        }, 2000);
+      });
     }
 
-    function goToSlide(carouselId, idx, thumb) {
-      bootstrap.Carousel.getOrCreateInstance(document.getElementById(carouselId)).to(idx);
-      thumb.parentElement.querySelectorAll("img").forEach(i=>i.classList.remove("active"));
-      thumb.classList.add("active");
+    // Load product details
+    if (product) {
+      document.getElementById("detailTitle").textContent = product.title;
+      document.getElementById("detailDesc").textContent = product.desc;
+      document.getElementById("detailOrig").textContent = product.orig;
+      document.getElementById("detailPrice").textContent = `${product.price} جنيه`;
+
+      const slidesContainer = document.getElementById("detailSlides");
+      product.imgs.forEach((img, index) => {
+        slidesContainer.innerHTML += `
+          <div class="carousel-item ${index === 0 ? 'active' : ''}">
+            <img src="${img}" class="d-block w-100" alt="${product.title}">
+          </div>
+        `;
+      });
+    } else {
+      document.body.innerHTML = "<h3 class='text-center text-danger'>❌ المنتج غير موجود</h3>";
     }
   </script>
-
 </body>
 </html>
