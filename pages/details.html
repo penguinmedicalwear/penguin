@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تفاصيل السكراپ</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <style>
+    body {background:#121212;color:#f1f1f1;font-family:'Cairo',sans-serif;padding:20px;}
+    .carousel-item img{height:300px;object-fit:cover;}
+    .price-original{ text-decoration:line-through;color:#bbb;margin-left:10px; }
+  </style>
+</head>
+<body>
+  <a href="scrubs.html" class="btn btn-secondary mb-3">← رجوع</a>
+  <div class="container">
+    <div id="detailCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+      <div class="carousel-inner" id="detailSlides"></div>
+      <button class="carousel-control-prev" data-bs-target="#detailCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+      <button class="carousel-control-next" data-bs-target="#detailCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
+    <h2 id="detailTitle"></h2>
+    <p id="detailDesc"></p>
+    <p><span class="price-original" id="detailOrig"></span> <span id="detailPrice"></span></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const data={
+      Dubai:{imgs:['scrub1.jpg','scrub2.jpg'], title:'Dubai', desc:'خامة إيطالية فاخرة', orig:'1000 جنيه', price:'600 جنيه'},
+      Aqua:{imgs:['aqua1.jpg','aqua2.jpg'], title:'Aqua man', desc:'لون مميز وقماش مقاوم للبهتان', orig:'950 جنيه', price:'580 جنيه'},
+      Midnight:{imgs:['midnight1.jpg','midnight2.jpg'], title:'Midnight', desc:'تصميم أنيق للمناوبات الليلية', orig:'1100 جنيه', price:'650 جنيه'},
+    };
+    const params=new URLSearchParams(location.search), id=params.get('id');
+    const sel=data[id];
+    if(sel){
+      document.getElementById('detailTitle').textContent='سكراب '+sel.title;
+      document.getElementById('detailDesc').textContent=sel.desc;
+      document.getElementById('detailOrig').textContent=sel.orig;
+      document.getElementById('detailPrice').textContent=sel.price;
+      const slides=sel.imgs.map((img,i)=>`
+        <div class="carousel-item${i==0?' active':''}">
+          <img src="assets/images/${img}" class="w-100"/>
+        </div>`).join('');
+      document.getElementById('detailSlides').innerHTML=slides;
+    }
+  </script>
+</body>
+</html>

@@ -77,7 +77,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- EmailJS v3 (script بدون module) -->
+  <!-- EmailJS v3 -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     (function() {
@@ -129,12 +129,21 @@
             snapshot.forEach(doc => {
               const item = doc.data();
               item.id = doc.id;
-              cartItemsData.push({ id: doc.id, product: item.product, price: item.price });
+
+              cartItemsData.push({ 
+                id: doc.id, 
+                product: item.product, 
+                price: item.price,
+                size: item.size || "غير محدد"
+              });
+
               totalPrice += item.price;
+
               cartContainer.innerHTML += `
                 <div class="cart-item">
                   <h5>${item.product}</h5>
                   <p>السعر: ${item.price} جنيه</p>
+                  <p>المقاس: ${item.size || "غير محدد"}</p>
                   <button class="btn btn-danger btn-sm" onclick="removeItem('${doc.id}')">🗑 حذف</button>
                 </div>
               `;
@@ -200,10 +209,13 @@
 
       const orderItems = cartItemsData.map(item => ({
         product: item.product,
-        price: item.price
+        price: item.price,
+        size: item.size
       }));
 
-      const orderDetails = orderItems.map(item => `${item.product} - ${item.price} جنيه`).join('\n');
+      const orderDetails = orderItems.map(item => 
+        `${item.product} - ${item.price} جنيه - المقاس: ${item.size}`
+      ).join('\n');
 
       const order = {
         name,
