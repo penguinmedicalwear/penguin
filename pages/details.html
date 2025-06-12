@@ -40,19 +40,20 @@
       <button class="btn btn-outline-light size-btn" onclick="selectSize('XXXL')">XXXL</button>
     </div>
 
-    <button class="btn btn-success mt-3" onclick="addToCart()">إضافة إلى السلة</button>
+    <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
+            <div class="successMessage">✅ تمت الإضافة!</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+     apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
@@ -96,40 +97,44 @@
       }
     };
 
-    const params = new URLSearchParams(location.search);
-    const id = params.get('id');
-    const sel = data[id];
-    let selectedSize = "";
+  
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    function selectSize(size) {
-      selectedSize = size;
-      document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+  <script>
+    firebase.initializeApp({apiKey:"...",authDomain:"...",projectId:"penguin-orders"});
+    const db = firebase.firestore();
+    let selectedSize = null;
+
+    function selectSize(btn) {
+      const grp = btn.parentElement;
+      grp.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedSize = btn.textContent;
     }
 
-    function addToCart() {
-      if (!selectedSize) return alert("يرجى اختيار المقاس أولاً");
-      db.collection("cart").add({
-        product: sel.title,
-        price: sel.price,
-        size: selectedSize,
-        timestamp: new Date()
-      }).then(() => alert("تمت إضافة المنتج إلى السلة بنجاح"))
-        .catch(err => console.error("خطأ أثناء الإضافة:", err));
+    function addToCart(el) {
+      if (!selectedSize) return alert("❗ اختر المقاس");
+      const card=el.closest(".card");
+      const name=card.querySelector(".card-title").textContent;
+      const price=parseInt(card.querySelector("p span:last-child").textContent);
+      db.collection("cart").add({product:name,price:price, size:selectedSize, createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+        .then(()=>{
+          const msg=card.querySelector(".successMessage");
+          msg.classList.add("show");
+          setTimeout(()=>msg.classList.remove("show"),2000);
+          selectedSize=null;
+          card.querySelectorAll(".btn-group button").forEach(b=>b.classList.remove("active"));
+        });
     }
 
-    if (sel) {
-      document.getElementById('detailTitle').textContent = 'سكراب ' + sel.title;
-      document.getElementById('detailDesc').textContent = sel.desc;
-      document.getElementById('detailOrig').textContent = sel.orig;
-      document.getElementById('detailPrice').textContent = sel.price;
-
-      const slides = sel.imgs.map((img, i) => `
-        <div class="carousel-item${i === 0 ? ' active' : ''}">
-          <img src="${img}" class="w-100" />
-        </div>`).join('');
-      document.getElementById('detailSlides').innerHTML = slides;
+    function goToSlide(carouselId, idx, thumb) {
+      bootstrap.Carousel.getOrCreateInstance(document.getElementById(carouselId)).to(idx);
+      thumb.parentElement.querySelectorAll("img").forEach(i=>i.classList.remove("active"));
+      thumb.classList.add("active");
     }
   </script>
+
 </body>
 </html>
