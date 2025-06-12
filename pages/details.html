@@ -6,30 +6,47 @@
   <title>تفاصيل السكراپ</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <style>
-    body { background: #121212; color: #f1f1f1; font-family: 'Cairo', sans-serif; padding: 20px; }
-    .carousel-item img { height: 300px; object-fit: cover; }
-    .price-original { text-decoration: line-through; color: #bbb; margin-left: 10px; }
-    .size-label { color: white; font-weight: bold; margin-bottom: 10px; display: block; }
-    .size-btn { margin: 5px; }
-    .successMessage {
-      display: none;
-      margin-top: 10px;
-      color: #4caf50;
-      font-weight: bold;
+    body {
+      background: #121212;
+      color: #f1f1f1;
+      font-family: 'Cairo', sans-serif;
+      padding: 20px;
     }
-    .successMessage.show { display: block; }
+    .carousel-item img {
+      height: 300px;
+      object-fit: cover;
+    }
+    .price-original {
+      text-decoration: line-through;
+      color: #bbb;
+      margin-left: 10px;
+    }
+    .size-btn {
+      margin: 5px;
+      border: 1px solid #fff;
+      background: transparent;
+      color: #fff;
+    }
+    .size-btn.active {
+      background: #0d6efd;
+      color: #fff;
+      border-color: #0d6efd;
+    }
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
   </style>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-  <div class="d-flex justify-content-between mb-3">
-    <a href="scrubs.html" class="btn btn-secondary">← رجوع</a>
-    <a href="cart.html" class="btn btn-primary">🛒 عربة التسوق</a>
+  <div class="top-buttons">
+    <a href="index.html" class="btn btn-secondary">الصفحة الرئيسية</a>
+    <a href="cart.html" class="btn btn-success">عربة التسوق 🛒</a>
   </div>
+
+  <a href="scrubs.html" class="btn btn-info mb-3">← رجوع لقائمة السكرابات</a>
 
   <div class="container">
     <div id="detailCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
@@ -44,35 +61,26 @@
 
     <h2 id="detailTitle"></h2>
     <p id="detailDesc"></p>
-    <p><span class="price-original" id="detailOrig"></span> <span id="detailPrice"></span></p>
+    <p>
+      <span class="price-original" id="detailOrig"></span>
+      <span id="detailPrice"></span>
+    </p>
 
-    <label class="size-label">اختر المقاس:</label>
-    <div id="sizeOptions">
-      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'S')">S</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'M')">M</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'L')">L</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XL')">XL</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
-      <button class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XXXL')">XXXL</button>
+    <h5 class="mt-4">اختر المقاس:</h5>
+    <div id="sizeButtons" class="mb-3">
+      <button class="btn size-btn" data-size="S">S</button>
+      <button class="btn size-btn" data-size="M">M</button>
+      <button class="btn size-btn" data-size="L">L</button>
+      <button class="btn size-btn" data-size="XL">XL</button>
+      <button class="btn size-btn" data-size="XXL">XXL</button>
+      <button class="btn size-btn" data-size="XXXL">XXXL</button>
     </div>
 
-    <button class="btn btn-success mt-3" onclick="addToCart()">إضافة للعربة</button>
-    <div class="successMessage" id="successMessage">✅ تمت الإضافة!</div>
+    <button class="btn btn-primary" id="addToCartBtn">إضافة إلى العربة</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
-      authDomain: "penguin-orders.firebaseapp.com",
-      projectId: "penguin-orders",
-      storageBucket: "penguin-orders.appspot.com",
-      messagingSenderId: "516028471159",
-      appId: "1:516028471159:web:9fb63bf904651a5070f372"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
     const data = {
       Dubai: {
         imgs: [
@@ -84,7 +92,7 @@
         title: 'Dubai',
         desc: 'خامة إيطالية فاخرة',
         orig: '1000 جنيه',
-        price: '600'
+        price: '600 جنيه'
       },
       Aqua: {
         imgs: [
@@ -96,7 +104,7 @@
         title: 'Aqua man',
         desc: 'لون مميز وقماش مقاوم للبهتان',
         orig: '1000 جنيه',
-        price: '600'
+        price: '600 جنيه'
       },
       Midnight: {
         imgs: [
@@ -108,59 +116,57 @@
         title: 'Midnight',
         desc: 'تصميم أنيق للمناوبات الليلية',
         orig: '1000 جنيه',
-        price: '600'
+        price: '600 جنيه'
       }
     };
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const productName = urlParams.get('product');
-    const product = data[productName];
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const sel = data[id];
 
-    let selectedSize = null;
+    if (sel) {
+      document.getElementById('detailTitle').textContent = 'سكراب ' + sel.title;
+      document.getElementById('detailDesc').textContent = sel.desc;
+      document.getElementById('detailOrig').textContent = sel.orig;
+      document.getElementById('detailPrice').textContent = sel.price;
 
-    function selectSize(btn, size) {
-      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedSize = size;
+      const slides = sel.imgs.map((img, i) => `
+        <div class="carousel-item${i === 0 ? ' active' : ''}">
+          <img src="${img}" class="w-100"/>
+        </div>
+      `).join('');
+      document.getElementById('detailSlides').innerHTML = slides;
     }
 
-    function addToCart() {
+    let selectedSize = null;
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSize = btn.getAttribute('data-size');
+      });
+    });
+
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
       if (!selectedSize) {
-        alert('❗ اختر المقاس أولاً');
+        alert('من فضلك اختر المقاس أولاً');
         return;
       }
 
-      db.collection("cart").add({
-        product: product.title,
-        price: parseInt(product.price),
+      const product = {
+        id: id,
+        title: sel.title,
+        price: sel.price,
         size: selectedSize,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        document.getElementById("successMessage").classList.add("show");
-        setTimeout(() => {
-          document.getElementById("successMessage").classList.remove("show");
-        }, 2000);
-      });
-    }
+        img: sel.imgs[0]
+      };
 
-    // Load product details
-    if (product) {
-      document.getElementById("detailTitle").textContent = product.title;
-      document.getElementById("detailDesc").textContent = product.desc;
-      document.getElementById("detailOrig").textContent = product.orig;
-      document.getElementById("detailPrice").textContent = `${product.price} جنيه`;
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(cart));
 
-      const slidesContainer = document.getElementById("detailSlides");
-      product.imgs.forEach((img, index) => {
-        slidesContainer.innerHTML += `
-          <div class="carousel-item ${index === 0 ? 'active' : ''}">
-            <img src="${img}" class="d-block w-100" alt="${product.title}">
-          </div>
-        `;
-      });
-    } else {
-      document.body.innerHTML = "<h3 class='text-center text-danger'>❌ المنتج غير موجود</h3>";
-    }
+      alert(`✅ تم إضافة سكراب ${sel.title} بمقاس ${selectedSize} إلى العربة.`);
+    });
   </script>
 </body>
 </html>
