@@ -146,43 +146,40 @@
     </div>
   </div>
 
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let selectedSize = null;
 
-<script>
-  let selectedSize = null;
+    function selectSize(btn) {
+      const grp = btn.parentElement;
+      grp.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedSize = btn.textContent;
+    }
 
-  function selectSize(btn) {
-    const grp = btn.parentElement;
-    grp.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    selectedSize = btn.textContent;
-  }
+    function addToCart(el) {
+      if (!selectedSize) return alert("❗ اختر المقاس");
+      const card = el.closest(".card");
+      const name = card.querySelector(".card-title").textContent;
+      const price = parseInt(card.querySelector("p span:last-child").textContent);
 
-  function addToCart(el) {
-    if (!selectedSize) return alert("❗ اختر المقاس");
-    const card = el.closest(".card");
-    const name = card.querySelector(".card-title").textContent;
-    const price = parseInt(card.querySelector("p span:last-child").textContent);
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ product: name, price: price, size: selectedSize });
+      localStorage.setItem("cart", JSON.stringify(cart));
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ product: name, price: price, size: selectedSize });
-    localStorage.setItem("cart", JSON.stringify(cart));
+      const msg = card.querySelector(".successMessage");
+      msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 2000);
 
-    const msg = card.querySelector(".successMessage");
-    msg.classList.add("show");
-    setTimeout(() => msg.classList.remove("show"), 2000);
+      selectedSize = null;
+      card.querySelectorAll(".btn-group button").forEach(b => b.classList.remove("active"));
+    }
 
-    selectedSize = null;
-    card.querySelectorAll(".btn-group button").forEach(b => b.classList.remove("active"));
-  }
-
-  function goToSlide(carouselId, idx, thumb) {
-    bootstrap.Carousel.getOrCreateInstance(document.getElementById(carouselId)).to(idx);
-    thumb.parentElement.querySelectorAll("img").forEach(i => i.classList.remove("active"));
-    thumb.classList.add("active");
-  }
-</script>
-
-
+    function goToSlide(carouselId, idx, thumb) {
+      bootstrap.Carousel.getOrCreateInstance(document.getElementById(carouselId)).to(idx);
+      thumb.parentElement.querySelectorAll("img").forEach(i => i.classList.remove("active"));
+      thumb.classList.add("active");
+    }
+  </script>
 </body>
 </html>
