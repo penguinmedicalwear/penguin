@@ -1,172 +1,163 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تفاصيل السكراپ</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تفاصيل المنتج</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <style>
     body {
-      background: #121212;
-      color: #f1f1f1;
-      font-family: 'Cairo', sans-serif;
+      background-color: #121212;
+      color: white;
       padding: 20px;
     }
     .carousel-item img {
-      height: 300px;
-      object-fit: cover;
+      max-height: 400px;
+      object-fit: contain;
     }
-    .price-original {
-      text-decoration: line-through;
-      color: #bbb;
-      margin-left: 10px;
+    .size-label {
+      font-weight: bold;
+      color: white;
     }
-    .size-btn {
+    .size-button {
       margin: 5px;
-      border: 1px solid #fff;
-      background: transparent;
-      color: #fff;
-    }
-    .size-btn.active {
-      background: #0d6efd;
-      color: #fff;
-      border-color: #0d6efd;
-    }
-    .top-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
 
-  <div class="top-buttons">
-    <a href="index.html" class="btn btn-secondary">الصفحة الرئيسية</a>
-    <a href="cart.html" class="btn btn-success">عربة التسوق 🛒</a>
+<div class="container">
+  <h1 id="productName" class="mb-4"></h1>
+  <div id="carouselContainer" class="mb-4"></div>
+  <p id="productDescription"></p>
+  <h4 id="productPrice"></h4>
+
+  <div class="mt-4">
+    <label class="size-label">اختر المقاس:</label><br />
+    <div id="sizeButtons" class="btn-group" role="group" aria-label="Sizes">
+      <!-- Size buttons will be injected here -->
+    </div>
   </div>
 
-  <a href="scrubs.html" class="btn btn-info mb-3">← رجوع لقائمة السكرابات</a>
+  <button id="addToCartBtn" class="btn btn-success mt-4">إضافة إلى العربة</button>
+</div>
 
-  <div class="container">
-    <div id="detailCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
-      <div class="carousel-inner" id="detailSlides"></div>
-      <button class="carousel-control-prev" data-bs-target="#detailCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" data-bs-target="#detailCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
+<!-- Firebase Scripts -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-    <h2 id="detailTitle"></h2>
-    <p id="detailDesc"></p>
-    <p>
-      <span class="price-original" id="detailOrig"></span>
-      <span id="detailPrice"></span>
-    </p>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
-    <h5 class="mt-4">اختر المقاس:</h5>
-    <div id="sizeButtons" class="mb-3">
-      <button class="btn size-btn" data-size="S">S</button>
-      <button class="btn size-btn" data-size="M">M</button>
-      <button class="btn size-btn" data-size="L">L</button>
-      <button class="btn size-btn" data-size="XL">XL</button>
-      <button class="btn size-btn" data-size="XXL">XXL</button>
-      <button class="btn size-btn" data-size="XXXL">XXXL</button>
-    </div>
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    <button class="btn btn-primary" id="addToCartBtn">إضافة إلى العربة</button>
-  </div>
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    const data = {
-      Dubai: {
-        imgs: [
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%20.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%201.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%202.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%20side%20.jpg?raw=true'
-        ],
-        title: 'Dubai',
-        desc: 'خامة إيطالية فاخرة',
-        orig: '1000 جنيه',
-        price: '600 جنيه'
-      },
-      Aqua: {
-        imgs: [
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%20.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%201.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%20front.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%20side.jpg?raw=true'
-        ],
-        title: 'Aqua man',
-        desc: 'لون مميز وقماش مقاوم للبهتان',
-        orig: '1000 جنيه',
-        price: '600 جنيه'
-      },
-      Midnight: {
-        imgs: [
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%201.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%202.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%20front%20.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%20side%20.jpg?raw=true'
-        ],
-        title: 'Midnight',
-        desc: 'تصميم أنيق للمناوبات الليلية',
-        orig: '1000 جنيه',
-        price: '600 جنيه'
-      }
-    };
+  const productNameElem = document.getElementById('productName');
+  const productDescriptionElem = document.getElementById('productDescription');
+  const productPriceElem = document.getElementById('productPrice');
+  const carouselContainer = document.getElementById('carouselContainer');
+  const sizeButtonsContainer = document.getElementById('sizeButtons');
+  const addToCartBtn = document.getElementById('addToCartBtn');
 
-    const params = new URLSearchParams(location.search);
-    const id = params.get('id');
-    const sel = data[id];
+  let selectedSize = null;
+  let currentProduct = null;
 
-    if (sel) {
-      document.getElementById('detailTitle').textContent = 'سكراب ' + sel.title;
-      document.getElementById('detailDesc').textContent = sel.desc;
-      document.getElementById('detailOrig').textContent = sel.orig;
-      document.getElementById('detailPrice').textContent = sel.price;
+  function createSizeButtons() {
+    const sizes = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+    sizes.forEach(size => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-outline-light size-button';
+      btn.innerText = size;
+      btn.onclick = () => {
+        selectedSize = size;
+        document.querySelectorAll('.size-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      };
+      sizeButtonsContainer.appendChild(btn);
+    });
+  }
 
-      const slides = sel.imgs.map((img, i) => `
-        <div class="carousel-item${i === 0 ? ' active' : ''}">
-          <img src="${img}" class="w-100"/>
-        </div>
-      `).join('');
-      document.getElementById('detailSlides').innerHTML = slides;
+  async function loadProductDetails() {
+    if (!productId) {
+      productNameElem.innerText = "المنتج غير موجود";
+      return;
     }
 
-    let selectedSize = null;
-    document.querySelectorAll('.size-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedSize = btn.getAttribute('data-size');
-      });
+    const productRef = doc(db, "scrubs", productId);
+    const productSnap = await getDoc(productRef);
+
+    if (!productSnap.exists()) {
+      productNameElem.innerText = "المنتج غير موجود";
+      return;
+    }
+
+    const product = productSnap.data();
+    currentProduct = product;
+
+    productNameElem.innerText = product.name;
+    productDescriptionElem.innerText = product.description || '';
+    productPriceElem.innerText = `السعر: ${product.price} جنيه`;
+
+    // Carousel
+    const carouselId = "productCarousel";
+    const images = product.images || [];
+
+    if (images.length > 0) {
+      const carouselInner = images.map((url, index) => `
+        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+          <img src="${url}" class="d-block w-100" alt="Product Image ${index + 1}">
+        </div>
+      `).join('');
+
+      carouselContainer.innerHTML = `
+        <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            ${carouselInner}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      `;
+    }
+
+    createSizeButtons();
+  }
+
+  addToCartBtn.addEventListener('click', () => {
+    if (!selectedSize) {
+      alert("من فضلك اختر المقاس أولاً");
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push({
+      id: productId,
+      name: currentProduct.name,
+      price: currentProduct.price,
+      size: selectedSize,
+      image: currentProduct.images?.[0] || ''
     });
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert("تمت إضافة المنتج إلى العربة بنجاح!");
+  });
 
-    document.getElementById('addToCartBtn').addEventListener('click', () => {
-      if (!selectedSize) {
-        alert('من فضلك اختر المقاس أولاً');
-        return;
-      }
+  loadProductDetails();
+</script>
 
-      const product = {
-        id: id,
-        title: sel.title,
-        price: sel.price,
-        size: selectedSize,
-        img: sel.imgs[0]
-      };
-
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(product);
-      localStorage.setItem('cart', JSON.stringify(cart));
-
-      alert(`✅ تم إضافة سكراب ${sel.title} بمقاس ${selectedSize} إلى العربة.`);
-    });
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
