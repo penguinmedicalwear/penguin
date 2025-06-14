@@ -132,13 +132,13 @@
               <button class="btn btn-outline-light btn-sm" onclick="selectSize(this)">XXXL</button>
             </div>
             <a href="details.html?id=Midnight" class="btn btn-info mb-2">عرض التفاصيل</a>
-            <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
+             <button class="btn btn-success" onclick="addToCart(this)">إضافة للعربة</button>
             <div class="successMessage">✅ تمت الإضافة!</div>
           </div>
         </div>
       </div>
 
-      <div class="text-center">
+     <div class="text-center">
         <a href="../index.html" class="btn btn-primary">← العودة للصفحة الرئيسية</a>
         <a href="cart.html" class="btn btn-success ms-2">🛒 عربة التسوق</a>
       </div>
@@ -146,40 +146,43 @@
     </div>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
+    firebase.initializeApp({apiKey:"...",authDomain:"...",projectId:"penguin-orders"});
+    const db = firebase.firestore();
     let selectedSize = null;
 
     function selectSize(btn) {
       const grp = btn.parentElement;
-      grp.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+      grp.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
       btn.classList.add("active");
       selectedSize = btn.textContent;
     }
 
     function addToCart(el) {
       if (!selectedSize) return alert("❗ اختر المقاس");
-      const card = el.closest(".card");
-      const name = card.querySelector(".card-title").textContent;
-      const price = parseInt(card.querySelector("p span:last-child").textContent);
-
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ product: name, price: price, size: selectedSize });
-      localStorage.setItem("cart", JSON.stringify(cart));
-
-      const msg = card.querySelector(".successMessage");
-      msg.classList.add("show");
-      setTimeout(() => msg.classList.remove("show"), 2000);
-
-      selectedSize = null;
-      card.querySelectorAll(".btn-group button").forEach(b => b.classList.remove("active"));
+      const card=el.closest(".card");
+      const name=card.querySelector(".card-title").textContent;
+      const price=parseInt(card.querySelector("p span:last-child").textContent);
+      db.collection("cart").add({product:name,price:price, size:selectedSize, createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+        .then(()=>{
+          const msg=card.querySelector(".successMessage");
+          msg.classList.add("show");
+          setTimeout(()=>msg.classList.remove("show"),2000);
+          selectedSize=null;
+          card.querySelectorAll(".btn-group button").forEach(b=>b.classList.remove("active"));
+        });
     }
 
     function goToSlide(carouselId, idx, thumb) {
       bootstrap.Carousel.getOrCreateInstance(document.getElementById(carouselId)).to(idx);
-      thumb.parentElement.querySelectorAll("img").forEach(i => i.classList.remove("active"));
+      thumb.parentElement.querySelectorAll("img").forEach(i=>i.classList.remove("active"));
       thumb.classList.add("active");
     }
   </script>
+
 </body>
 </html>
