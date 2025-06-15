@@ -39,28 +39,33 @@
       padding: 20px;
       background-color: #0d0d0d;
       color: #888;
-    }
-    /* أيقونة العربة */
-    .cart-icon {
-      position: absolute;
-      top: 15px;
-      left: 15px; /* بداية الصفحة RTL */
-      font-size: 2rem;
+    } .cart-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
       color: white;
-      cursor: pointer;
-      transition: color 0.3s;
+      padding: 10px 15px;
+      border-radius: 30px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
     }
-    .cart-icon:hover {
-      color: #0d6efd;
-    }
+   
   </style>
 </head>
 <body>
+
+  
+  <!-- 🛒 أيقونة السلة -->
+  <a href="../cart.html" class="cart-icon">
+    🛒 <span id="cart-count">0</span>
+  </a>
   <!-- Hero -->
   <div class="hero">
     <img src="assets/images/logo.png" alt="Penguin Logo" />
-    <a href="pages/cart.html" class="cart-icon" title="عربة التسوق">
-      <i class="bi bi-cart3"></i>
     </a>
     <h1 class="display-5 fw-bold">Penguin Medical Wear</h1>
     <p class="lead">اسكراب معمول علشانك🫀🐧 </p>
@@ -109,19 +114,39 @@
     </div>
   </div>
 
+   <body>
   <!-- Contact -->
   <div class="container mb-5">
     <h2 class="text-center mb-4">تواصل معنا</h2>
     <div class="text-center">
       <p><strong>الهاتف:</strong> 01157767590</p>
-      <p><strong>البريد الإلكتروني:</strong>https://penguinmedicalwear.github.io/penguin/</p>
+      <p><strong>البريد الإلكتروني:</strong> penguin@medicalwear.com</p>
       <p><strong>العنوان:</strong> أسيوط الجديدة، مصر</p>
     </div>
   </div>
-
-  <!-- Footer -->
+<body>
   <footer class="text-center">
     <p>© 2025 Penguin Medical Wear. جميع الحقوق محفوظة.</p>
   </footer>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // تحديث عداد السلة تلقائيًا
+    db.collection("cart").onSnapshot(snapshot => {
+      document.getElementById("cart-count").textContent = snapshot.size;
+    });
+  </script>
 </body>
-</html>
+<html>
