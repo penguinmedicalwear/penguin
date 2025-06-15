@@ -2,106 +2,238 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تفاصيل السكراپ</title>
+  <title>تفاصيل المنتج - Penguin</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <style>
     body {
-      background: #121212;
-      color: #f1f1f1;
+      background-color: #121212;
+      color: white;
       font-family: 'Cairo', sans-serif;
       padding: 20px;
     }
-    .carousel-item img {
-      height: 300px;
-      object-fit: cover;
+    .product-card {
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 20px;
     }
-    .price-original {
-      text-decoration: line-through;
-      color: #bbb;
-      margin-left: 10px;
+    .size-btn {
+      margin: 5px;
     }
+    .size-btn.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+     .cart-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 30px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+   .main-page {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 50%;
+  font-size: 20px;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.main-page:hover {
+  background-color: #333;
+  transform: scale(1.1);
+}
   </style>
 </head>
 <body>
-  <a href="scrubs.html" class="btn btn-secondary mb-3">← رجوع</a>
+
+  <!-- 🛒 أيقونة السلة -->
+  <a href="cart.html" class="cart-icon">
+    🛒 <span id="cart-count">0</span>
+  </a>
+
+ <a href="../index.html" class="main-page">
+    <i class="bi bi-house-fill"></i>
+  </a>
+  </style>
+</head>
+<body>
+
+ 
+
   <div class="container">
-    <div id="detailCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
-      <div class="carousel-inner" id="detailSlides"></div>
-      <button class="carousel-control-prev" data-bs-target="#detailCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" data-bs-target="#detailCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
+    <h1 class="text-center mb-4">📦 تفاصيل المنتج</h1>
+    <div class="product-card">
+      <h3 id="productName">...</h3>
+      <p id="productDescription">وصف المنتج هنا.</p>
+      <p><strong>السعر:</strong> <span id="productPrice">0</span> جنيه</p>
+
+      <div class="mb-3 text-center">
+        <label class="form-label text-white">اختر المقاس:</label><br />
+        <button class="btn btn-outline-light size-btn" data-size="S">S</button>
+        <button class="btn btn-outline-light size-btn" data-size="M">M</button>
+        <button class="btn btn-outline-light size-btn" data-size="L">L</button>
+        <button class="btn btn-outline-light size-btn" data-size="XL">XL</button>
+        <button class="btn btn-outline-light size-btn" data-size="XXL">XXL</button>
+        <button class="btn btn-outline-light size-btn" data-size="XXXL">XXXL</button>
+      </div>
+
+      <div class="text-center">
+        <button class="btn btn-success" onclick="addToCart()">🛒 أضف إلى العربة</button>
+        <a href="scrubs.html" class="btn btn-secondary ms-2">← رجوع</a>
+      </div>
     </div>
-    <h2 id="detailTitle"></h2>
-    <p id="detailDesc"></p>
-    <p>
-      <span class="price-original" id="detailOrig"></span>
-      <span id="detailPrice"></span>
-    </p>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    const data = {
-      Dubai: {
-        imgs: [
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%20.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%201.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%202.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/dubai%20side%20.jpg?raw=true'
-        ],
-        title: 'Dubai',
-        desc: 'خامة إيطالية فاخرة',
-        orig: '1000 جنيه',
-        price: '600 جنيه'
-      },
-      Aqua: {
-        imgs: [
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%20.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%201.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%20front.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/Aquaman%20side.jpg?raw=true'
-        ],
-        title: 'Aqua man',
-        desc: 'لون مميز وقماش مقاوم للبهتان',
-        orig: '1000 جنيه',
-        price: '600 جنيه'
-      },
-      Midnight: {
-        imgs: [
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%201.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%202.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%20front%20.jpg?raw=true',
-          'https://github.com/penguinmedicalwear/penguin/blob/main/assets/images/midnight%20side%20.jpg?raw=true'
-        ],
-        title: 'Midnight',
-        desc: 'تصميم أنيق للمناوبات الليلية',
-        orig: '1000 جنيه',
-        price: '600 جنيه'
-      }
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
     };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
 
-    const params = new URLSearchParams(location.search);
-    const id = params.get('id');
-    const sel = data[id];
+  <script>
+    let selectedSize = null;
+    let product = null;
 
-    if (sel) {
-      document.getElementById('detailTitle').textContent = 'سكراب ' + sel.title;
-      document.getElementById('detailDesc').textContent = sel.desc;
-      document.getElementById('detailOrig').textContent = sel.orig;
-      document.getElementById('detailPrice').textContent = sel.price;
+    // فعّل المقاسات
+    document.addEventListener("DOMContentLoaded", () => {
+      const sizeButtons = document.querySelectorAll(".size-btn");
+      sizeButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          sizeButtons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          selectedSize = btn.dataset.size;
+        });
+      });
 
-      const slides = sel.imgs.map((img, i) => `
-        <div class="carousel-item${i === 0 ? ' active' : ''}">
-          <img src="${img}" class="w-100"/>
-        </div>
-      `).join('');
-      
-      document.getElementById('detailSlides').innerHTML = slides;
+      loadProductDetails();
+      updateCartCount(); // ✅ تحديث عداد العربة عند تحميل الصفحة
+    });
+
+    function loadProductDetails() {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get("id");
+
+      if (!productId) {
+        document.getElementById("productName").textContent = "❌ لم يتم تحديد منتج.";
+        return;
+      }
+
+      db.collection("products").doc(productId).get()
+        .then(doc => {
+          if (!doc.exists) {
+            document.getElementById("productName").textContent = "❌ المنتج غير موجود.";
+            return;
+          }
+
+          product = doc.data();
+          document.getElementById("productName").textContent = product.name || "منتج بدون اسم";
+          document.getElementById("productDescription").textContent = product.description || "";
+          document.getElementById("productPrice").textContent = product.price || "0";
+        })
+        .catch(err => {
+          console.error("Error loading product:", err);
+        });
+    }
+
+    function addToCart() {
+      if (!product) {
+        alert("❌ لا يمكن الإضافة. المنتج غير معروف.");
+        return;
+      }
+
+      if (!selectedSize) {
+        alert("❗ يرجى اختيار المقاس.");
+        return;
+      }
+
+      db.collection("cart").add({
+        product: product.name,
+        price: product.price,
+        size: selectedSize,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        alert("✅ تم إضافة المنتج إلى العربة!");
+        updateCartCount(); // ✅ تحديث العداد بعد الإضافة
+      })
+      .catch(error => {
+        console.error("Error adding to cart:", error);
+        alert("❌ حدث خطأ أثناء الإضافة إلى العربة.");
+      });
+    }
+
+    // ✅ كود تحديث عدد المنتجات في العربة
+    function updateCartCount() {
+      db.collection("cart").get()
+        .then(snapshot => {
+          const count = snapshot.size;
+          const countElement = document.getElementById("cart-count");
+          if (countElement) {
+            countElement.textContent = count;
+          }
+        })
+        .catch(error => {
+          console.error("❌ خطأ في تحميل عدد العربة:", error);
+        });
     }
   </script>
+
+  <script>
+    // ✅ إضافة المنتجات يدويًا لو احتجت
+    const products = [
+      {
+        id: "Dubai",
+        name: "Dubai",
+        price: 350,
+        description: "سكرب رجالي أنيق بلون كحلي من قماش مريح وجودة عالية."
+      },
+      {
+        id: "Aqua",
+        name: "Aqua man",
+        price: 375,
+        description: "سكرب رجالي بلون أكوا فريد، مثالي لأوقات العمل الطويلة."
+      },
+      {
+        id: "Midnight",
+        name: "Midnight",
+        price: 399,
+        description: "سكرب رجالي كلاسيكي بلون أسود، تصميم عملي ومتميز."
+      }
+    ];
+
+    // products.forEach(product => {
+    //   firebase.firestore().collection("products").doc(product.id).set(product)
+    //     .then(() => console.log(`✅ تم إضافة ${product.name}`))
+    //     .catch(err => console.error(`❌ خطأ أثناء إضافة ${product.name}:`, err));
+    // });
+  </script>
+
 </body>
 </html>

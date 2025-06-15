@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>كروكس طبي - Penguin</title>
+  <title>كروكس - Penguin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <style>
     body {
@@ -18,11 +19,75 @@
       margin-top: 100px;
       color: #0d6efd;
     }
+    .main-page {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 50%;
+  font-size: 20px;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.main-page:hover {
+  background-color: #333;
+  transform: scale(1.1);
+}
+
+    .cart-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 30px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+   
   </style>
 </head>
 <body>
-  <a  href="../index.html" class="btn btn-primary">← العودة للصفحة الرئيسية</a>
-  <h1>الكروكس الطبي</h1>
-  <div class="coming-soon">🩴 قـريـبـًا ...</div>
+<body>
+
+  <!-- 🛒 أيقونة السلة -->
+  <a href="cart.html" class="cart-icon">
+    🛒 <span id="cart-count">0</span>
+  </a>
+  <a href="../index.html" class="main-page">
+    <i class="bi bi-house-fill"></i>
+  </a>
+  <h1>كروكس</h1>
+  <div class="coming-soon">🧪 قـريـبـًا ...</div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhwUGROezGr52_kEmwdVpvHle-6u17cDY",
+      authDomain: "penguin-orders.firebaseapp.com",
+      projectId: "penguin-orders",
+      storageBucket: "penguin-orders.appspot.com",
+      messagingSenderId: "516028471159",
+      appId: "1:516028471159:web:9fb63bf904651a5070f372"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    // تحديث عداد السلة تلقائيًا
+    db.collection("cart").onSnapshot(snapshot => {
+      document.getElementById("cart-count").textContent = snapshot.size;
+    });
+  </script>
 </body>
 </html>
